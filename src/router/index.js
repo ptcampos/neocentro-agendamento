@@ -1,9 +1,13 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-import routes from './routes'
+import routes from './routes';
 
-Vue.use(VueRouter)
+import { getUser, removeUser } from '../services/User';
+
+import { Notify } from 'quasar';
+
+Vue.use(VueRouter);
 
 /*
  * If not building with SSR mode, you can
@@ -14,7 +18,7 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function(/* { store, ssrContext } */) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -23,8 +27,32 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
-    base: process.env.VUE_ROUTER_BASE
-  })
+    base: process.env.VUE_ROUTER_BASE,
+  });
 
-  return Router
+  Router.beforeEach((to, from, next) => {
+    const user = getUser();
+    if (user && to.name === 'default') {
+      return next('/app');
+    }
+    if (user && to.matched && to.matched.length && to.matched[0].name === 'default') {
+      return next('/app');
+    }
+    if (!user && to.meta.requiresAuth) {
+      return next({ path: '/login', query: { type: 'client' } });
+    }
+    if (!to.meta.allowedUsers) {
+      return next();
+    }
+    if (to.meta.allowedUsers.indexOf(user.data.roles) > -1) {
+      return next();
+    }
+    Notify.create({
+      message: 'Você não tem permissão para acessar essa rota.',
+    });
+    removeUser();
+    return next('/app');
+  });
+
+  return Router;
 }
