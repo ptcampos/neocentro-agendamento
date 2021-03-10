@@ -3,7 +3,21 @@ import * as UserService from '../services/User';
 const routes = [
   {
     path: '/',
-    redirect: '/signup',
+    name: 'main',
+    component: () => import('layouts/PublicLayout.vue'),
+    children: [
+      { path: '', name: 'web-home', component: () => import('pages/landing/Home.vue') },
+      { path: 'cart', name: 'web-cart', component: () => import('pages/landing/Cart.vue') },
+      {
+        path: 'payment',
+        name: 'web-payment',
+        component: () => import('pages/landing/Payment.vue'),
+      },
+    ],
+  },
+  {
+    path: '/auth',
+    redirect: '/auth/signup',
     name: 'default',
     component: () => import('layouts/PublicLayout.vue'),
     children: [

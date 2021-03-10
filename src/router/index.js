@@ -51,7 +51,7 @@ export default function(/* { store, ssrContext } */) {
       message: 'Você não tem permissão para acessar essa rota.',
     });
     removeUser();
-    return next('/app');
+    return next('/');
   });
 
   return Router;
