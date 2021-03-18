@@ -13,7 +13,7 @@
     <div class="col-xs-12">
       <q-separator dark />
     </div>
-    <div class="col-xs-12 bg-grey-1 q-pb-md shadow-1">
+    <div class="col-xs-12 bg-grey-1 q-pb-md shadow-1" v-show="products && products.length">
       <PaymentCard />
     </div>
   </div>
@@ -29,6 +29,12 @@ export default {
     UserInfo,
     CartProducts,
     PaymentCard,
+  },
+
+  computed: {
+    products() {
+      return this.$store.getters['general/productsInCart'];
+    },
   },
 };
 </script>

@@ -6,19 +6,6 @@
           <div class="col-sm-8 col-xs-12">
             <div class="text-h6">Criar conta</div>
           </div>
-          <div class="col-sm-12 col-xs-12">
-            <SelectInput
-              label="Unidade"
-              v-model="auth.unidade"
-              :options="[
-                { label: 'Brasília', value: 'brasilia' },
-                { label: 'Curitiba', value: 'curitiba' },
-                { label: 'Uberlândia', value: 'uberlandia' },
-                { label: 'Valparaiso', value: 'valparaiso' },
-              ]"
-              :required="true"
-            />
-          </div>
           <div class="col-sm-6 col-xs-12">
             <TextInput
               label="Nome"
@@ -109,7 +96,6 @@
 import * as _ from 'lodash';
 
 import TextInput from 'components/TextInput';
-import SelectInput from 'components/SelectInput';
 
 export default {
   data() {
@@ -151,7 +137,15 @@ export default {
 
   components: {
     TextInput,
-    SelectInput,
+  },
+
+  mounted() {
+    const currentUnity = this.$store.getters['general/getCurrentUnity'];
+    this.auth.unidade = currentUnity;
+
+    if (!currentUnity) {
+      this.$router.push('/');
+    }
   },
 
   methods: {
@@ -181,7 +175,7 @@ export default {
         // sigin
         this.$store.dispatch('users/signInUser', {
           ...user,
-          unidade: this.auth.unidade
+          unidade: this.auth.unidade,
         });
       } catch (error) {
         console.log(error);

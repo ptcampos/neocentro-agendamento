@@ -17,3 +17,7 @@ export function removeProductFromCart({ commit }, { id }) {
 export function clearCart({ commit }) {
   commit('CLEAR_CART');
 }
+
+export function setCurrentUnity({ commit }, val) {
+  commit('SET_CURRENT_UNITY', val);
+}

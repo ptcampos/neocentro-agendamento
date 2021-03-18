@@ -1,5 +1,13 @@
 <template>
   <q-list>
+    <q-item v-show="!products || !products.length">
+      <q-item-section class="text-bold">
+        <div class="text-body">Nenhuma vacina adicionada ao carrinho</div>
+      </q-item-section>
+      <q-item-section side>
+        <q-btn label="Selecionar Vacinas" no-caps color="primary" @click="$router.push('/')" />
+      </q-item-section>
+    </q-item>
     <q-item :key="index" v-for="(product, index) in products">
       <q-item-section thumbnail>
         <img
@@ -52,8 +60,8 @@
         </div>
       </q-item-section>
     </q-item>
-    <q-separator />
-    <q-item>
+    <q-separator v-show="products && products.length" />
+    <q-item v-show="products && products.length">
       <q-item-section class="text-bold">
         <div class="text-h6">Total a Pagar:</div>
       </q-item-section>

@@ -5,19 +5,6 @@
         <div class="text-h6">Já possui uma conta?</div>
       </div>
       <div class="offset-sm-2 col-sm-8 col-xs-12">
-        <SelectInput
-          label="Unidade"
-          v-model="auth.unidade"
-          :options="[
-            { label: 'Brasília', value: 'brasilia' },
-            { label: 'Curitiba', value: 'curitiba' },
-            { label: 'Uberlândia', value: 'uberlandia' },
-            { label: 'Valparaiso', value: 'valparaiso' },
-          ]"
-          :required="true"
-        />
-      </div>
-      <div class="offset-sm-2 col-sm-8 col-xs-12">
         <TextInput label="E-mail / Nome de Usuário" v-model="auth.username" />
       </div>
       <div class="offset-sm-2 col-sm-8 col-xs-12">
@@ -63,7 +50,6 @@
 import * as _ from 'lodash';
 
 import TextInput from 'components/TextInput';
-import SelectInput from 'components/SelectInput';
 
 export default {
   data() {
@@ -78,7 +64,15 @@ export default {
 
   components: {
     TextInput,
-    SelectInput,
+  },
+
+  mounted() {
+    const currentUnity = this.$store.getters['general/getCurrentUnity'];
+    this.auth.unidade = currentUnity;
+
+    if (!currentUnity) {
+      this.$router.push('/');
+    }
   },
 
   methods: {
@@ -98,11 +92,11 @@ export default {
 
         const loginUserDt = {
           ...user,
-          unidade: this.auth.unidade
-        }
+          unidade: this.auth.unidade,
+        };
         this.$store.dispatch('users/signInUser', loginUserDt);
 
-        this.$root.$emit('onUpdateCurrentUser', loginUserDt)
+        this.$root.$emit('onUpdateCurrentUser', loginUserDt);
       } catch (error) {
         console.log(error);
         this.$q.notify({

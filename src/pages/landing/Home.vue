@@ -1,85 +1,78 @@
 <template>
   <div class="row q-col-gutter-md">
-    <div class="col-xs-12">
-      <div class="text-h5">Selecione as Vacinas</div>
-    </div>
-    <div class="col-xs-12">
-      <SelectInput
-        :options="[
-          { label: 'Brasília', value: 'brasilia' },
-          { label: 'Curitiba', value: 'curitiba' },
-          { label: 'Uberlândia', value: 'uberlandia' },
-          { label: 'Valparaíso', value: 'valparaiso' },
-        ]"
-        label="Unidade"
-        v-model="filter.unidade"
-        @input="loadProducts"
-      />
-    </div>
-    <div class="col-xs-12">
+    <div class="col-xs-12" v-show="filter.unidade">
       <div class="row q-col-gutter-md">
-        <div class="col-sm-6 col-xs-12" :key="index" v-for="(product, index) in products">
-          <q-card class="my-card">
-            <q-img
-              :src="
-                product.images && product.images[0] && product.images[0].src
-                  ? product.images[0].src
-                  : ''
-              "
-              style="max-height: 200px"
-            />
+        <div class="col-xs-12">
+          <div class="text-h5">
+            Selecione as Vacinas (Unidade: {{ this.filter.unidade }}
+            <q-btn label="Trocar" no-caps color="primary" dense @click="unitySelection = true" />)
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="row q-col-gutter-md">
+            <div class="col-sm-6 col-xs-12" :key="index" v-for="(product, index) in products">
+              <q-card class="my-card">
+                <q-img
+                  :src="
+                    product.images && product.images[0] && product.images[0].src
+                      ? product.images[0].src
+                      : ''
+                  "
+                  style="max-height: 200px"
+                />
 
-            <q-card-section>
-              <q-btn
-                fab
-                color="primary"
-                icon="eva-plus"
-                class="absolute"
-                style="top: 0; right: 12px; transform: translateY(-50%);"
-                @click="addToCart(product)"
-              >
-                <q-tooltip anchor="center left" self="center right" :offset="[10, 10]">
-                  Adicionar ao Carrinho
-                </q-tooltip>
-              </q-btn>
+                <q-card-section>
+                  <q-btn
+                    fab
+                    color="primary"
+                    icon="eva-plus"
+                    class="absolute"
+                    style="top: 0; right: 12px; transform: translateY(-50%);"
+                    @click="addToCart(product)"
+                  >
+                    <q-tooltip anchor="center left" self="center right" :offset="[10, 10]">
+                      Adicionar ao Carrinho
+                    </q-tooltip>
+                  </q-btn>
 
-              <div class="row no-wrap items-center">
-                <div class="col text-h5 text-bold">
-                  {{ product.name }}
-                </div>
-                <!-- <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
-                  <q-icon name="place" />
-                  250 ft
-                </div> -->
-              </div>
-            </q-card-section>
+                  <div class="row no-wrap items-center">
+                    <div class="col text-h5 text-bold">
+                      {{ product.name }}
+                    </div>
+                    <!-- <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
+                      <q-icon name="place" />
+                      250 ft
+                    </div> -->
+                  </div>
+                </q-card-section>
 
-            <q-card-section class="q-pt-none">
-              <div class="text-caption text-grey">
-                <div v-html="product.short_description" />
-              </div>
-              <div class="text-bold text-h6 q-mt-sm">
-                {{ product.price | currency }}
-              </div>
-            </q-card-section>
+                <q-card-section class="q-pt-none">
+                  <div class="text-caption text-grey">
+                    <div v-html="product.short_description" />
+                  </div>
+                  <div class="text-bold text-h6 q-mt-sm">
+                    {{ product.price | currency }}
+                  </div>
+                </q-card-section>
 
-            <q-separator />
+                <q-separator />
 
-            <q-card-actions>
-              <q-btn
-                @click="addToCart(product)"
-                type="button"
-                flat
-                icon="eva-shopping-cart-outline"
-                label="Adicionar ao Carrinho"
-                color="primary"
-              />
-            </q-card-actions>
-          </q-card>
+                <q-card-actions>
+                  <q-btn
+                    @click="addToCart(product)"
+                    type="button"
+                    flat
+                    icon="eva-shopping-cart-outline"
+                    label="Adicionar ao Carrinho"
+                    color="primary"
+                  />
+                </q-card-actions>
+              </q-card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn
         :disable="!productsInCart.length"
@@ -96,17 +89,53 @@
         </q-tooltip>
       </q-btn>
     </q-page-sticky>
+
+    <q-dialog
+      v-model="unitySelection"
+      persistent
+      transition-show="flip-down"
+      transition-hide="flip-up"
+    >
+      <q-card class="bg-primary text-white">
+        <q-card-section>
+          <div class="text-h6">Selecione a Unidade</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="row q-col-gutter-sm">
+            <div
+              class="col-xs-12"
+              :key="unidade.value"
+              v-for="unidade in [
+                { label: 'Brasília', value: 'brasilia' },
+                { label: 'Curitiba', value: 'curitiba' },
+                { label: 'Uberlândia', value: 'uberlandia' },
+                { label: 'Valparaíso', value: 'valparaiso' },
+              ]"
+            >
+              <q-btn
+                :label="unidade.label"
+                color="white"
+                text-color="primary"
+                class="full-width"
+                @click="setCurrentUnity(unidade.value)"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
 <script>
 import * as _ from 'lodash';
 
-import SelectInput from 'components/SelectInput';
+// import SelectInput from 'components/SelectInput';
 
 export default {
   components: {
-    SelectInput,
+    // SelectInput,
   },
 
   data() {
@@ -114,16 +143,31 @@ export default {
       stars: 4,
       products: [],
       filter: {
-        unidade: 'brasilia',
+        unidade: '',
       },
+      unitySelection: false,
     };
   },
 
   mounted() {
-    this.loadProducts();
+    // this.loadProducts();
+    const currentUnity = this.$store.getters['general/getCurrentUnity'];
+    this.filter.unidade = currentUnity;
+
+    if (!this.filter.unidade) {
+      this.unitySelection = true;
+    } else {
+      this.loadProducts();
+    }
   },
 
   methods: {
+    setCurrentUnity(unity) {
+      this.filter.unidade = unity;
+      this.$store.dispatch('general/setCurrentUnity', unity);
+      this.unitySelection = false;
+      this.loadProducts();
+    },
     async loadProducts() {
       this.$q.loading.show();
       try {

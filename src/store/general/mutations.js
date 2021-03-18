@@ -42,3 +42,8 @@ export function REMOVE_PRODUCT_FROM_CART(state, id) {
 export function CLEAR_CART(state) {
   state.productsInCart = [];
 }
+
+export function SET_CURRENT_UNITY(state, val) {
+  state.currentUnity = val;
+  localStorage.setItem('currentUnity', val + '');
+}
