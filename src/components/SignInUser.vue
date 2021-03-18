@@ -18,7 +18,7 @@
         />
       </div>
       <div class="offset-sm-2 col-sm-8 col-xs-12">
-        <TextInput type="email" label="E-mail" v-model="auth.email" />
+        <TextInput label="E-mail / Nome de Usuário" v-model="auth.username" />
       </div>
       <div class="offset-sm-2 col-sm-8 col-xs-12">
         <TextInput type="password" label="Senha" v-model="auth.password" />
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import * as _ from 'lodash';
+
 import TextInput from 'components/TextInput';
 import SelectInput from 'components/SelectInput';
 
@@ -68,7 +70,7 @@ export default {
     return {
       auth: {
         unidade: '',
-        email: '',
+        username: '',
         password: '',
       },
     };
@@ -80,7 +82,37 @@ export default {
   },
 
   methods: {
-    onSubmit() {},
+    async onSubmit() {
+      this.$q.loading.show();
+      try {
+        const user = await this.$axios
+          .post('/customers/authenticate', {
+            ...this.auth,
+          })
+          .then(r => r.data)
+          .then(r => r.data);
+
+        if (!user || _.isArray(user)) {
+          throw new Error('Login ou senha inválidos');
+        }
+
+        const loginUserDt = {
+          ...user,
+          unidade: this.auth.unidade
+        }
+        this.$store.dispatch('users/signInUser', loginUserDt);
+
+        this.$root.$emit('onUpdateCurrentUser', loginUserDt)
+      } catch (error) {
+        console.log(error);
+        this.$q.notify({
+          message: 'Login ou senha incorretos',
+          color: 'negative',
+        });
+      } finally {
+        this.$q.loading.hide();
+      }
+    },
   },
 };
 </script>

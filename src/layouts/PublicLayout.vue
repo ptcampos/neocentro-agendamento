@@ -3,7 +3,7 @@
     <q-page-container>
       <q-page padding>
         <div class="row">
-          <div class="offset-md-3 offset-sm-1 col-md-6 col-sm-10 col-xs-12">
+          <div class="offset-md-2 offset-sm-1 col-md-8 col-sm-10 col-xs-12">
             <header class="row q-col-gutter-md">
               <div class="col-xs-12 col-sm-4 q-mb-lg">
                 <img
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { getUser } from '../services/User';
+
 export default {
   data() {
     return {};
@@ -43,6 +45,10 @@ export default {
 
   mounted() {
     // this.$root.$on('onAddToCart', this.onAddToCartEvent);
+    // check for logged USER
+    if (getUser()) {
+      this.$store.dispatch('users/setLoggedUser', getUser());
+    }
   },
 
   beforeDestroy() {

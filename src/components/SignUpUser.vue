@@ -159,8 +159,30 @@ export default {
       this.$q.loading.show();
       try {
         // create user
+        await this.$axios
+          .post('/customers', {
+            ...this.auth,
+          })
+          .then(r => r.data);
+
+        const user = await this.$axios
+          .post('/customers/authenticate', {
+            unidade: this.auth.unidade,
+            username: this.auth.email,
+            password: this.auth.password,
+          })
+          .then(r => r.data)
+          .then(r => r.data);
+
+        this.$q.notify({
+          message: 'Seu cadastro foi realizado com sucesso.',
+          color: 'positive',
+        });
         // sigin
-        // set user
+        this.$store.dispatch('users/signInUser', {
+          ...user,
+          unidade: this.auth.unidade
+        });
       } catch (error) {
         console.log(error);
         this.$q.notify({

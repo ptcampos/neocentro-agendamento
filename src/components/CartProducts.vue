@@ -2,12 +2,18 @@
   <q-list>
     <q-item :key="index" v-for="(product, index) in products">
       <q-item-section thumbnail>
-        <img src="https://cdn.quasar.dev/img/mountains.jpg" />
+        <img
+          :src="
+            product.images && product.images[0] && product.images[0].src
+              ? product.images[0].src
+              : ''
+          "
+        />
       </q-item-section>
       <q-item-section>
         <div class="row q-col-gutter-sm">
           <div class="col-xs-12">
-            {{ product.title }}
+            {{ product.name }}
           </div>
           <div class="col-xs-12">
             <div class="row items-center">

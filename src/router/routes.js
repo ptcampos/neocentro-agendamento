@@ -13,6 +13,11 @@ const routes = [
         name: 'web-payment',
         component: () => import('pages/landing/Payment.vue'),
       },
+      {
+        path: 'schedule',
+        name: 'web-schedule',
+        component: () => import('pages/landing/Schedule.vue'),
+      },
     ],
   },
   {

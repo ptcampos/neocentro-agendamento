@@ -38,3 +38,7 @@ export function REMOVE_PRODUCT_FROM_CART(state, id) {
     state.productsInCart.splice(productInListIndex, 1);
   }
 }
+
+export function CLEAR_CART(state) {
+  state.productsInCart = [];
+}
