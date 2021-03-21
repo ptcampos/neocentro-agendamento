@@ -13,19 +13,6 @@
                   @click="$router.push('/')"
                 />
               </div>
-              <div class="col-xs-12 col-sm-8">
-                <div class="row q-col-gutter-md items-center justify-end q-pr-md">
-                  <q-btn
-                    icon="eva-lock"
-                    dense
-                    flat
-                    color="primary"
-                    label="Acompanhar Agendamento"
-                    no-caps
-                    to="/auth"
-                  />
-                </div>
-              </div>
             </header>
             <router-view />
           </div>

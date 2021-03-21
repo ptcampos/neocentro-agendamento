@@ -33,13 +33,13 @@ export default function(/* { store, ssrContext } */) {
   Router.beforeEach((to, from, next) => {
     const user = getUser();
     if (user && to.name === 'default') {
-      return next('/app');
+      return next('/');
     }
     if (user && to.matched && to.matched.length && to.matched[0].name === 'default') {
-      return next('/app');
+      return next('/');
     }
     if (!user && to.meta.requiresAuth) {
-      return next({ path: '/login', query: { type: 'client' } });
+      return next({ path: '/', query: { type: 'client' } });
     }
     if (!to.meta.allowedUsers) {
       return next();

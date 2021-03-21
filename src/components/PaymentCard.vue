@@ -185,6 +185,9 @@ export default {
         // go to calendar schedule
         // get payment token and send to schedule
         // save order in woocommerce
+        // await this.$axios.post('/process-payment', {
+        //   ...this.payment,
+        // });
         this.$router.push(`/schedule?pt=${1234567}`);
       } catch (error) {
         console.log(error);
