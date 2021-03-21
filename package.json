@@ -6,6 +6,8 @@
   "author": "Paulo Campos <paulo@thriade.com>",
   "private": true,
   "scripts": {
+    "build": "quasar clean && quasar build",
+    "start": "http-server dist/spa",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev"

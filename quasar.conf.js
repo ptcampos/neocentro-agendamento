@@ -12,7 +12,7 @@ module.exports = function(ctx) {
     API_URL: 'http://localhost:3000',
   };
   const prodEnvs = {
-    API_URL: 'https://api.neocentroagendamento.thriade.com',
+    API_URL: 'https://neocentro-api.herokuapp.com',
   };
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
